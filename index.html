@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A focused student study planner and grade dashboard.">
+  <title>Study Planner | Grade Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Study Planner home">
+        <span class="brand-mark">S</span>
+        <span>study<span>deck</span></span>
+      </a>
+      <div class="topbar-meta">
+        <span class="date-label" id="todayLabel"></span>
+        <span class="avatar" aria-label="Student profile">ST</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="pageTitle">
+        <div>
+          <p class="eyebrow">YOUR ACADEMIC HQ</p>
+          <h1 id="pageTitle">Plan with purpose.<br><em>Finish with confidence.</em></h1>
+          <p class="hero-copy">Keep your courses, deadlines, and momentum in one calm, clear place.</p>
+        </div>
+        <div class="hero-accent" aria-hidden="true"><span>FOCUS</span><strong>01</strong></div>
+      </section>
+
+      <section class="stats-grid" aria-label="Study overview">
+        <article class="stat-card stat-card--dark"><span class="stat-label">TOTAL COURSES</span><strong id="courseCount">0</strong><span class="stat-note">active subjects</span></article>
+        <article class="stat-card"><span class="stat-label">OPEN ASSIGNMENTS</span><strong id="openCount">0</strong><span class="stat-note">still on your list</span></article>
+        <article class="stat-card stat-card--orange"><span class="stat-label">DUE THIS WEEK</span><strong id="weekCount">0</strong><span class="stat-note">deadlines to watch</span></article>
+        <article class="stat-card"><span class="stat-label">COMPLETION RATE</span><strong id="completionRate">0%</strong><span class="stat-note">assignments finished</span></article>
+      </section>
+
+      <section class="workspace-section" aria-labelledby="coursesHeading">
+        <div class="section-heading">
+          <div><p class="section-kicker">01 / ORGANIZE</p><h2 id="coursesHeading">Course management</h2></div>
+          <button class="button button--dark" id="addCourseButton" type="button"><span>+</span> Add course</button>
+        </div>
+        <div class="course-grid" id="courseList" aria-live="polite"></div>
+        <div class="empty-state" id="courseEmpty" hidden><span class="empty-icon">+</span><p>No courses yet</p><span>Add your first course to start planning.</span></div>
+      </section>
+
+      <section class="workspace-section assignments-section" aria-labelledby="assignmentsHeading">
+        <div class="section-heading">
+          <div><p class="section-kicker">02 / EXECUTE</p><h2 id="assignmentsHeading">Assignment management</h2></div>
+          <button class="button button--orange" id="addAssignmentButton" type="button"><span>+</span> Add assignment</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <caption class="sr-only">Your assignments and their current status</caption>
+            <thead><tr><th>Assignment</th><th>Course</th><th>Due date</th><th>Priority</th><th>Status</th><th><span class="sr-only">Actions</span></th></tr></thead>
+            <tbody id="assignmentList"></tbody>
+          </table>
+          <div class="empty-state" id="assignmentEmpty" hidden><span class="empty-icon">✓</span><p>Your desk is clear</p><span>Add an assignment when something new lands.</span></div>
+        </div>
+      </section>
+    </main>
+    <footer><span>STUDYDECK / V1.0</span><span>SMALL STEPS, STEADY PROGRESS.</span></footer>
+  </div>
+
+  <dialog id="courseDialog" class="modal">
+    <form method="dialog" id="courseForm" class="modal-form">
+      <button class="modal-close" value="cancel" type="submit" aria-label="Close course dialog">×</button>
+      <p class="section-kicker">COURSE EDITOR</p><h2 id="courseDialogTitle">Add a course</h2>
+      <input type="hidden" id="courseId">
+      <label for="courseName">Course name</label><input id="courseName" name="courseName" required maxlength="80" placeholder="e.g. Human Computer Interaction">
+      <label for="courseCode">Course code</label><input id="courseCode" name="courseCode" required maxlength="20" placeholder="e.g. CS 319">
+      <div class="modal-actions"><button class="button button--quiet" value="cancel" type="submit">Cancel</button><button class="button button--dark" value="default" type="submit">Save course</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="assignmentDialog" class="modal">
+    <form method="dialog" id="assignmentForm" class="modal-form">
+      <button class="modal-close" value="cancel" type="submit" aria-label="Close assignment dialog">×</button>
+      <p class="section-kicker">ASSIGNMENT EDITOR</p><h2 id="assignmentDialogTitle">Add an assignment</h2>
+      <input type="hidden" id="assignmentId">
+      <label for="assignmentTitle">Title</label><input id="assignmentTitle" required maxlength="100" placeholder="e.g. Research proposal">
+      <label for="assignmentCourse">Course</label><select id="assignmentCourse" required></select>
+      <div class="form-row"><div><label for="assignmentDueDate">Due date</label><input id="assignmentDueDate" type="date" required></div><div><label for="assignmentPriority">Priority</label><select id="assignmentPriority"><option value="Low">Low</option><option value="Medium" selected>Medium</option><option value="High">High</option></select></div></div>
+      <label for="assignmentStatus">Status</label><select id="assignmentStatus"><option value="Not Started">Not Started</option><option value="In Progress">In Progress</option><option value="Completed">Completed</option></select>
+      <div class="modal-actions"><button class="button button--quiet" value="cancel" type="submit">Cancel</button><button class="button button--orange" value="default" type="submit">Save assignment</button></div>
+    </form>
+  </dialog>
+  <script src="app.js"></script>
+</body>
+</html>
