@@ -47,16 +47,22 @@ function startOfToday() {
 }
 
 function endOfThisWeek() {
-  const end = startOfToday();
-  end.setDate(end.getDate() + (7 - end.getDay()));
-  end.setHours(23, 59, 59, 999);
+  const end = startOfThisWeek();
+  end.setDate(end.getDate() + 6);
   return end;
 }
 
+function startOfThisWeek() {
+  const start = startOfToday();
+  start.setDate(start.getDate() - start.getDay());
+  return start;
+}
+
 function isDueThisWeek(assignment) {
-  if (!assignment.dueDate || assignment.status === "Completed") return false;
-  const due = new Date(`${assignment.dueDate}T23:59:59`);
-  return due >= startOfToday() && due <= endOfThisWeek();
+  if (!assignment.dueDate) return false;
+  const [year, month, day] = assignment.dueDate.split("-").map(Number);
+  const due = new Date(year, month - 1, day);
+  return due >= startOfThisWeek() && due <= endOfThisWeek();
 }
 
 function isDueWithin48Hours(assignment) {
