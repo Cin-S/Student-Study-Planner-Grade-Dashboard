@@ -22,7 +22,6 @@
         <span class="avatar" aria-label="Student profile">ST</span>
       </div>
     </header>
-
     <main>
       <section class="hero" aria-labelledby="pageTitle">
         <div>
@@ -33,16 +32,22 @@
         <div class="hero-accent" aria-hidden="true"><span>FOCUS</span><strong>01</strong></div>
       </section>
 
-      <section class="stats-grid" aria-label="Study overview">
-        <article class="stat-card stat-card--dark"><span class="stat-label">TOTAL COURSES</span><strong id="courseCount">0</strong><span class="stat-note">active subjects</span></article>
-        <article class="stat-card"><span class="stat-label">OPEN ASSIGNMENTS</span><strong id="openCount">0</strong><span class="stat-note">still on your list</span></article>
-        <article class="stat-card stat-card--orange"><span class="stat-label">DUE THIS WEEK</span><strong id="weekCount">0</strong><span class="stat-note">deadlines to watch</span></article>
-        <article class="stat-card"><span class="stat-label">COMPLETION RATE</span><strong id="completionRate">0%</strong><span class="stat-note">assignments finished</span></article>
+      <section class="analytics-banner" aria-labelledby="analyticsHeading">
+        <div class="analytics-heading"><p class="section-kicker">LIVE SNAPSHOT</p><h2 id="analyticsHeading">Your academic pulse</h2></div>
+        <div class="stats-grid">
+          <article class="stat-card stat-card--dark"><span class="stat-label">TOTAL ASSIGNMENTS</span><strong id="totalAssignments">0</strong><span class="stat-note">across all courses</span></article>
+          <article class="stat-card"><span class="stat-label">COMPLETED</span><strong id="completedAssignments">0</strong><span class="stat-note">finished assignments</span></article>
+          <article class="stat-card"><span class="stat-label">REMAINING</span><strong id="remainingAssignments">0</strong><span class="stat-note">still on your list</span></article>
+          <article class="stat-card stat-card--orange"><span class="stat-label">OVERDUE</span><strong id="overdueAssignments">0</strong><span class="stat-note">need attention</span></article>
+          <article class="stat-card"><span class="stat-label">DUE THIS WEEK</span><strong id="dueThisWeek">0</strong><span class="stat-note">by Sunday night</span></article>
+          <article class="stat-card"><span class="stat-label">GRADE AVERAGE</span><strong id="gradeAverage">N/A</strong><span class="stat-note">graded work only</span></article>
+        </div>
+        <label class="toggle-control snapshot-toggle"><input id="highlightWeek" type="checkbox"><span class="toggle" aria-hidden="true"></span> Mark due-this-week assignments</label>
       </section>
 
       <section class="workspace-section" aria-labelledby="coursesHeading">
         <div class="section-heading">
-          <div><p class="section-kicker">01 / ORGANIZE</p><h2 id="coursesHeading">Course management</h2></div>
+          <div><h2 id="coursesHeading">Course management</h2></div>
           <button class="button button--dark" id="addCourseButton" type="button"><span>+</span> Add course</button>
         </div>
         <div class="course-grid" id="courseList" aria-live="polite"></div>
@@ -51,20 +56,21 @@
 
       <section class="workspace-section assignments-section" aria-labelledby="assignmentsHeading">
         <div class="section-heading">
-          <div><p class="section-kicker">02 / EXECUTE</p><h2 id="assignmentsHeading">Assignment management</h2></div>
-          <button class="button button--orange" id="addAssignmentButton" type="button"><span>+</span> Add assignment</button>
+          <div><h2 id="assignmentsHeading">Assignment management</h2></div>
+          <div class="heading-actions"><button class="button button--quiet" id="exportCalendarButton" type="button">Export calendar</button><button class="button button--orange" id="addAssignmentButton" type="button"><span>+</span> Add assignment</button></div>
         </div>
+        <div class="assignment-tools"><label class="toggle-control"><input id="deadlineFilter" type="checkbox"><span class="toggle" aria-hidden="true"></span> Due in next 48 hours</label><label class="toggle-control"><input id="gradedFilter" type="checkbox"><span class="toggle" aria-hidden="true"></span> Graded only</label><span class="sort-note">High priority rises to the top automatically</span></div>
         <div class="table-wrap">
           <table>
             <caption class="sr-only">Your assignments and their current status</caption>
-            <thead><tr><th>Assignment</th><th>Course</th><th>Due date</th><th>Priority</th><th>Status</th><th><span class="sr-only">Actions</span></th></tr></thead>
+            <thead><tr><th>Assignment</th><th>Course</th><th>Due date</th><th>Grade</th><th>Priority</th><th>Status</th><th><span class="sr-only">Actions</span></th></tr></thead>
             <tbody id="assignmentList"></tbody>
           </table>
           <div class="empty-state" id="assignmentEmpty" hidden><span class="empty-icon">✓</span><p>Your desk is clear</p><span>Add an assignment when something new lands.</span></div>
         </div>
       </section>
     </main>
-    <footer><span>STUDYDECK / V1.0</span><span>SMALL STEPS, STEADY PROGRESS.</span></footer>
+    <footer><span>STUDYDECK / V2.0</span><span>SMALL STEPS, STEADY PROGRESS.</span></footer>
   </div>
 
   <dialog id="courseDialog" class="modal">
@@ -86,7 +92,7 @@
       <label for="assignmentTitle">Title</label><input id="assignmentTitle" required maxlength="100" placeholder="e.g. Research proposal">
       <label for="assignmentCourse">Course</label><select id="assignmentCourse" required></select>
       <div class="form-row"><div><label for="assignmentDueDate">Due date</label><input id="assignmentDueDate" type="date" required></div><div><label for="assignmentPriority">Priority</label><select id="assignmentPriority"><option value="Low">Low</option><option value="Medium" selected>Medium</option><option value="High">High</option></select></div></div>
-      <label for="assignmentStatus">Status</label><select id="assignmentStatus"><option value="Not Started">Not Started</option><option value="In Progress">In Progress</option><option value="Completed">Completed</option></select>
+      <div class="form-row"><div><label for="assignmentStatus">Status</label><select id="assignmentStatus"><option value="Not Started">Not Started</option><option value="In Progress">In Progress</option><option value="Completed">Completed</option></select></div><div><label for="assignmentGrade">Grade <span class="optional">(optional)</span></label><input id="assignmentGrade" type="number" min="0" max="100" step="0.01" placeholder="0–100"></div></div>
       <div class="modal-actions"><button class="button button--quiet" value="cancel" type="submit">Cancel</button><button class="button button--orange" value="default" type="submit">Save assignment</button></div>
     </form>
   </dialog>
